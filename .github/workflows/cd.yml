@@ -30,5 +30,8 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Build image and push to Google Artifact Registry
+      - name: Use gcloud CLI
+        run: gcloud info
+
+      - name: Build and push Docker image
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/symmetric-curve-441622-h9/notely-ar-repo/notely:latest
