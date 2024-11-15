@@ -21,9 +21,6 @@ jobs:
         with:
           go-version: "1.23.0"
 
-      - name: Install goose
-        run: go install github.com/pressly/goose/v3/cmd/goose@latest
-
       - name: Build app
         run: ./scripts/buildprod.sh
 
@@ -42,8 +39,11 @@ jobs:
       - name: Build and push Docker image
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/symmetric-curve-441622-h9/notely-ar-repo/notely:latest
 
+      - name: Install goose
+        run: go install github.com/pressly/goose/v3/cmd/goose@latest
+
       - name: Run migrations
-        run: cd sql/schema && goose turso $DATABASE_URL up
+        run: ./scripts/migrateup.sh
 
       - name: Deploy to Cloud Run
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/symmetric-curve-441622-h9/notely-ar-repo/notely:latest --region us-central1 --allow-unauthenticated --project symmetric-curve-441622-h9 --max-instances=4
